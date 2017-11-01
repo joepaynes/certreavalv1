@@ -11,9 +11,15 @@ import {
 import NavBar from './NavBar';
 import VerticalMenu from './dashboard/vert_menu';
 import CertForm from './dashboard/cert_form';
+import NewCertForm from  './redux-form';
 
 
 class AppNew extends Component {
+
+  submit = (values) => {
+    console.log(values);
+  }
+
   render() {
     return (
       <div>
@@ -29,7 +35,7 @@ class AppNew extends Component {
                 <VerticalMenu activeItem="Add New" />
               </Grid.Column>
               <Grid.Column width={12}>
-                <CertForm />
+                <NewCertForm onSubmit={this.submit} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
