@@ -71,7 +71,7 @@ class CertTable extends Component {
 }
 function mapStateToProps(state) {
     return {
-        certificates: state.certificates
+        form: state.certificates
     };
 }
 export default connect(mapStateToProps, actions)(CertTable);
