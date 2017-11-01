@@ -3,6 +3,7 @@ import {
     FETCH_CERTS
 } from './types';
 
+//db = firebase.database() - access to Realtime Database, refer to docs
 import db  from '../firebase/firebase';
 
 export function createCert(values) {
@@ -13,15 +14,6 @@ export function createCert(values) {
 }
 
 export function fetchCerts() {
-    function writeUserData(name, email) {
-        db.ref('certifictates/').set({
-          username: name,
-          email: email,
-        });
-    }
-    
-    writeUserData("ben", "payne123@email.com");
-
     return {
         type: FETCH_CERTS,
     };
