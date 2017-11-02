@@ -10,6 +10,7 @@ import {
 //Redux Dependancies
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk'
 //Components
 import AppCert from './components/App_Cert';
 import AppNew from './components/App_New'
@@ -22,7 +23,7 @@ import './style/style.css';
 //Other
 import registerServiceWorker from './registerServiceWorker';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 ReactDOM.render(
     <Provider store={createStoreWithMiddleware(reducers)}>
