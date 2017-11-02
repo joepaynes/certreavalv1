@@ -25,7 +25,9 @@ class Header extends Component {
                     <Link to="/dashboard">
                         <Button>Log in</Button>
                     </Link>
-                    <Button as='a' style={{ marginLeft: '0.5em' }}>Sign Up</Button>
+                    <Link to="/signup">
+                        <Button style={{ marginLeft: '0.5em' }}>Sign Up</Button>
+                    </Link>
                 </Menu.Item>
                 </Menu>
             </Container>
