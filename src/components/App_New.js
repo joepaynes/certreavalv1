@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import db  from '../firebase/firebase';
 
 //Semantic Components
 import {
@@ -17,7 +18,11 @@ import NewCertForm from  './redux-form';
 class AppNew extends Component {
 
   submit = (values) => {
-    console.log(values);
+    db.ref("certifictates/").push({
+      certificate: values.certName,
+      type: values.certType,
+      expiry: values.certExpiryDate
+    })
   }
 
   render() {
