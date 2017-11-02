@@ -12,12 +12,13 @@ const Posts = [
     { certificate: 'ENG1', type: 'Medical', expiry: '01/10/19' },
 ]
 
-export default function(state = [], action) {
+export default function(state = Posts, action) {
     switch (action.type) {
         case CREATE_CERT:
             return _.concat(Posts, action.payload);
         case FETCH_CERTS:
-            return Posts;
+            console.log(action.payload);
+            return _.concat(state, action.payload);
         default:
             return state;
     }
