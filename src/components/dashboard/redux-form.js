@@ -3,6 +3,8 @@ import { Field, reduxForm } from 'redux-form'
 
 import VerticalMenu from './vert_menu';
 
+import { db } from '../../firebase/firebase';
+
 import { 
     Button, 
     Checkbox, 
@@ -12,7 +14,14 @@ import {
 } from 'semantic-ui-react';
 
 let NewCertForm = props => {
-    const { handleSubmit } = props
+
+    // function handleSubmit(values) {
+    //     db.ref("certifictates/").push({
+    //       certificate: values.certName,
+    //       type: values.certType,
+    //       expiry: values.certExpiryDate
+    //     })
+    // }
 
     return (
         <Container className="dashboard">
@@ -22,7 +31,7 @@ let NewCertForm = props => {
                         <VerticalMenu activeItem="Add New" />
                     </Grid.Column>
                     <Grid.Column width={12}>
-                        <Form onSubmit= {handleSubmit}>
+                        <Form onSubmit={this.handleSubmit}>
                             <Form.Field>
                             <label>Certificate Name</label>
                             <Field 

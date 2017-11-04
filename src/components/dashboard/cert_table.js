@@ -5,22 +5,47 @@ import * as actions from '../../actions';
 
 import VerticalMenu from './vert_menu';
 
+import {
+    auth,
+    db
+} from '../../firebase/firebase';
+
 import { 
     Table,
     Grid,
     Container
 } from 'semantic-ui-react';
 
+const user = auth.currentUser;
+
 class CertTable extends Component {
 
     state = {
         column: null,
-        data: this.props.certificates,
+        data: [
+            {
+                certificate: "Name of Certificate",
+                type: "STCW, CoC, Auxillary",
+                expiry: "Date of expiry"
+            }
+        ],
         direction: null,
     }
 
     componentWillMount() {
-        this.props.fetchCerts();
+        if (user) {
+            const uid = auth.currentUser.uid;
+            const user = db.ref(`/certifictates/${uid}`);
+            user.once("value")
+                .then(snapshot => {
+                    this.setState({
+                        data: snapshot.val()
+                    })
+                })
+                .catch(err => {
+                    console.log("Error fetching certificates", err);
+                });
+        }
     }
 
     handleSort = clickedColumn => () => {
