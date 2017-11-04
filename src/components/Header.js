@@ -28,8 +28,8 @@ class Header extends Component {
         } else {
             return  <Menu.Item position='right'>
                         <Menu.Item as="a">About Us</Menu.Item>
-                        <Link to="/dashboard">
-                            <Button>Log in</Button>
+                        <Link to="/signin">
+                            <Button>Sign in</Button>
                         </Link>
                         <Link to="/signup">
                             <Button style={{ marginLeft: '0.5em' }}>Sign Up</Button>

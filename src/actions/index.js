@@ -60,7 +60,28 @@ export function signUpUser({ email, password }) {
         //If request is bad...
         .catch(error => {
         // - Show an error to the user
+        console.log(error.code + ": " + error.message)
         dispatch(authError(error.code + ": " + error.message));
+        });
+    }
+}
+
+export function signInUser({ email, password}) {
+    return function(dispatch) {
+    //Submit email&password to server
+    auth.signInWithEmailAndPassword(email, password)
+        //Good request
+        .then(response => {
+            // - Update state to indicate user authenticated
+            dispatch({ type: AUTH_USER });
+            // - Redirect to a route '/feature' 
+            history.push('/dashboard');
+        })
+        //If request is bad...
+        .catch(error => {
+            // - Show an error to the user
+            console.log(error.code + ": " + error.message)
+            dispatch(authError(error.code + ": " + error.message));
         });
     }
 }
