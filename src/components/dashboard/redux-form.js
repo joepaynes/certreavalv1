@@ -19,7 +19,7 @@ let NewCertForm = props => {
             <Grid>
                 <Grid.Row>
                     <Grid.Column width={4}>
-                        <VerticalMenu activeItem="Certificates" />
+                        <VerticalMenu activeItem="Add New" />
                     </Grid.Column>
                     <Grid.Column width={12}>
                         <Form onSubmit= {handleSubmit}>

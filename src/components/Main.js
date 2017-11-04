@@ -5,6 +5,10 @@ import { Switch, Route } from 'react-router-dom'
 import Home from './home/Home';
 import Dashboard from './dashboard/router'
 import SignUpForm from './auth/signup';
+import SignOut from './auth/signout';
+
+//Auth
+import RequireAuth from './auth/require_auth';
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -16,7 +20,8 @@ const Main = () => (
     <Switch>
       <Route exact path='/' component={Home}/>
       <Route path='/signup' component={SignUpForm}/>
-      <Route path='/dashboard' component={Dashboard}/>
+      <Route path='/signout' component={SignOut} />
+      <Route path='/dashboard' component={RequireAuth(Dashboard)}/>
     </Switch>
   </main>
 )

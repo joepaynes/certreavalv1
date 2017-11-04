@@ -17,10 +17,21 @@ import './style/style.css';
 //Other
 import registerServiceWorker from './registerServiceWorker';
 
+//Returning user
+import { AUTH_USER } from './actions/types';
+import { auth } from './firebase/firebase';
+
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const store = createStoreWithMiddleware(reducers);
+
+auth.onAuthStateChanged(user => {
+    if(user) {
+        store.dispatch({ type: AUTH_USER });
+    }
+});
 
 ReactDOM.render(
-    <Provider store={createStoreWithMiddleware(reducers)}>
+    <Provider store={store}>
         <Router history={history}>
             <App />
         </Router>

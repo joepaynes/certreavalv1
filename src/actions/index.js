@@ -23,22 +23,25 @@ export function createCert(values) {
 
 export function fetchCerts() {
     return function(dispatch) {
-    const uid = auth.currentUser.uid;
-    console.log(uid);
-    const user = db.ref(`/certifictates/${uid}`);
-    user.once("value")
-        .then(snapshot => {
-            const cert = snapshot.val();
-            console.log(cert);
-            dispatch({
-                type: FETCH_CERTS,
-                payload: cert
-            })
-        })
-        .catch(err => {
-            console.log("Error fetching certificates", err);
-        });
-    }
+        if (auth.currentUser === null) {
+            return console.log("No user certificates");
+        } else {
+            const uid = auth.currentUser.uid;
+            const user = db.ref(`/certifictates/${uid}`);
+            user.once("value")
+                .then(snapshot => {
+                    const cert = snapshot.val();
+                    console.log(cert);
+                    dispatch({
+                        type: FETCH_CERTS,
+                        payload: cert
+                    })
+                })
+                .catch(err => {
+                    console.log("Error fetching certificates", err);
+                });
+            }
+        }
 }
 
 //Authentication Action Creators
@@ -67,4 +70,16 @@ export function authError(error) {
         type: AUTH_ERROR,
         payload: error
     };
+}
+
+export function signOutUser() {
+    return function(dispatch) {
+        auth.signOut()
+            .then(res => {
+                dispatch({ type: UNAUTH_USER });
+            })
+            .catch(err => {
+                console.log("Could not sign out user: ", err);
+            })
+    }
 }
