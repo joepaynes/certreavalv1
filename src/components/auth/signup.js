@@ -5,7 +5,6 @@ import * as actions from '../../actions';
 
 import { 
     Button, 
-    Checkbox, 
     Form 
 } from 'semantic-ui-react';
 

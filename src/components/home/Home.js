@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-//Components
-import NavBar from './NavBar';
-
 //Semantic Components
 import {
   Header,
@@ -21,7 +18,6 @@ class Home extends Component {
             style={{ minHeight: 700, padding: '1em 0em' }}
             vertical
           >
-          <NavBar />
           <Container text>
                 <Header
                   as='h1'

@@ -23,7 +23,9 @@ export function createCert(values) {
 
 export function fetchCerts() {
     return function(dispatch) {
-    const user = db.ref('/certifictates/-Kxq6666Fr_dBBoe1M5z');
+    const uid = auth.currentUser.uid;
+    console.log(uid);
+    const user = db.ref(`/certifictates/${uid}`);
     user.once("value")
         .then(snapshot => {
             const cert = snapshot.val();
