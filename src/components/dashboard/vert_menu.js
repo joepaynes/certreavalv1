@@ -20,10 +20,6 @@ class VerticalMenu extends Component {
             <Icon name="list layout" size="large" />
             Certificates
         </Menu.Item>
-        <Menu.Item as={Link} to="/dashboard/new" name='Add New' active={activeItem === 'Add New'} onClick={this.handleItemClick}>
-            <Icon name="add circle" size="large" />
-            Add New
-        </Menu.Item>
         <Menu.Item name='Settings' active={activeItem === 'Settings'} onClick={this.handleItemClick}>
         <Icon name="settings" size="large" />
             Settings
