@@ -4,6 +4,7 @@ import _ from 'lodash';
 import * as actions from '../../actions';
 
 import VerticalMenu from './vert_menu';
+import NewCertForm from "../forms/new_certificate/root_form"
 
 import {
     auth,
@@ -13,7 +14,7 @@ import {
 import { 
     Table,
     Grid,
-    Container
+    Container,
 } from 'semantic-ui-react';
 
 const user = auth.currentUser;
@@ -101,12 +102,28 @@ class CertTable extends Component {
                         ))}
                         </Table.Body>
                     </Table>
+                   <NewCertForm onSubmit = {this.certificateSubmit} />     
                 </Grid.Column>
             </Grid>
         </Container>
         );
     };
-}
+
+    certificateSubmit(values) {
+       console.log(values)
+       db.ref("/certificates").set({
+            name: values.name,
+            issueDate: values.issueDate,
+            expiryDate: values.expiryDate,
+            type: values.type,
+            institute: values.institute,
+            country: values.country,
+            declaration: values.declaration,
+            TC: values.TC
+       })
+    }
+    }
+
 function mapStateToProps(state) {
     return {
         certificates: state.certificates

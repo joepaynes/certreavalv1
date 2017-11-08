@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 
 //Components
 import CertTable from './cert_table';
-import NewCertForm from './redux-form';
+import NewCertForm from '../forms/new_certificate/root_form';
 
 
 // The Roster component matches one of two different routes
