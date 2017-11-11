@@ -17,6 +17,7 @@ import ThirdModule from "./third_module"
         this.state = {
             page: 1,
             open: false,
+            percent: 32
         }
     }
 
@@ -30,10 +31,10 @@ import ThirdModule from "./third_module"
         this.setState({page: 1})
     }
     nextPage() {
-        this.setState({page: this.state.page +1})
+        this.setState({page: this.state.page +1, percent: this.state.percent +34})
     }
     previousPage() {
-        this.setState({page: this.state.page -1})
+        this.setState({page: this.state.page -1, percent: this.state.percent -34})
     }
 
     render() {
@@ -41,13 +42,13 @@ import ThirdModule from "./third_module"
         const page = this.state.page
 
         if (page === 1) {
-            return <FirstModule onSubmit = { this.nextPage } state={this.state.open} open= {this.open} close={this.close}/>
+            return <FirstModule onSubmit = { this.nextPage } state={this.state.open} open= {this.open} close={this.close} percent={this.state.percent}/>
         }
         if (page === 2) {
-            return <SecondModule onSubmit = { this.nextPage } previousPage = {this.previousPage} state={this.state.open} open= {this.open} close={this.close} />
+            return <SecondModule onSubmit = { this.nextPage } previousPage = {this.previousPage} state={this.state.open} open= {this.open} close={this.close} percent={this.state.percent}/>
         }
         if (page === 3) {
-            return <ThirdModule onSubmit = { onSubmit } previousPage = {this.previousPage} state={this.state.open} open= {this.open} close={this.close} resetPage={this.reset} page={this.state.page} />
+            return <ThirdModule onSubmit = { onSubmit } previousPage = {this.previousPage} state={this.state.open} open= {this.open} close={this.close} resetPage={this.reset} page={this.state.page} percent={this.state.percent}/>
         }
     }
 }

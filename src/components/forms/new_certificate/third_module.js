@@ -6,7 +6,8 @@ import renderField from './render_field'
 import {
     Modal,
     Form,
-    Button
+    Button,
+    Progress
 } from 'semantic-ui-react'
 
 const ThirdModule = props => {
@@ -22,6 +23,7 @@ const ThirdModule = props => {
         closeIcon
         >
             <Modal.Header>
+                <Progress percent={props.percent} indicating />
                 Please take time to throughly read our Terms and Conditions
             </Modal.Header>
             <Modal.Content className="container">

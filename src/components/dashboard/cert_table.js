@@ -5,7 +5,9 @@ import * as actions from '../../actions';
 import history from '../../history';
 
 import VerticalMenu from './vert_menu';
-import NewCertForm from "../forms/new_certificate/root_form"
+import NewCertForm from "../forms/new_certificate/root_form";
+
+import placeholder from '../../images/imageplaceholder.png';
 
 import {
     auth,
@@ -13,9 +15,11 @@ import {
 } from '../../firebase/firebase';
 
 import { 
-    Table,
+    Item,
     Grid,
     Container,
+    Image as ImageComponent,
+    Segment
 } from 'semantic-ui-react';
 
 class CertTable extends Component {
@@ -25,6 +29,7 @@ class CertTable extends Component {
         // No certificates will return this initial data - TODO - push out to own file
         data: null,
         direction: null,
+        isLoading: true
     }
 
     componentWillMount() {
@@ -35,14 +40,18 @@ class CertTable extends Component {
                 const uncompiled = snapshot.val();
                 const complier = data => {
                     return {
-                        certificate: data.name,
+                        expiryDate: data.expiryDate,
+                        name: data.name,
+                        issueDate: data.issueDate,
                         type: data.type,
-                        expiry: data.expiryDate
+                        institute: data.institute,
+                        country: data.country,
                     }
                 }
                 const compiled = _.map(uncompiled, complier);
                 this.setState({
-                    data: compiled
+                    data: compiled,
+                    isLoading: false
                 })
             })
             .catch(err => {
@@ -69,6 +78,35 @@ class CertTable extends Component {
         })
       }
 
+    renderCerts = () => {
+        const data = this.state.data;
+        return _.map(data, ({ type, expiryDate, name, institute, country }) => (
+            <Item key={name}>
+                <Item.Image size="tiny" src={placeholder} />
+                <Item.Content>
+                    <Item.Header>{name}</Item.Header>
+                    <Item.Meta>Expiry: {expiryDate}</Item.Meta>
+                    <Item.Description>Issued by {institute} in {country}</Item.Description>
+                    <Item.Extra>{type}</Item.Extra>
+                </Item.Content>
+            </Item>
+        ));
+    }
+
+    Loader = () => {
+        if (this.state.isLoading === true) {
+            return (
+                <Segment size="big" style={{ minHeight: 700}} loading />
+            )
+        } else if (this.state.isLoading === false) {
+            return (
+                <Item.Group divided link>
+                    {this.renderCerts()}
+                </Item.Group>
+            ) 
+        }
+    }
+
     render() {
         const { column, data, direction } = this.state
         console.log(this.props.authentication);
@@ -80,31 +118,8 @@ class CertTable extends Component {
                     <VerticalMenu activeItem="Certificates" />
                 </Grid.Column>
                 <Grid.Column width={12}>
-                    <Table sortable celled fixed selectable>
-                        <Table.Header>
-                        <Table.Row>
-                            <Table.HeaderCell sorted={column === 'certificate' ? direction : null} onClick={this.handleSort('certificate')}>
-                            Certificate
-                            </Table.HeaderCell>
-                            <Table.HeaderCell sorted={column === 'type' ? direction : null} onClick={this.handleSort('type')}>
-                            Type
-                            </Table.HeaderCell>
-                            <Table.HeaderCell sorted={column === 'expiry' ? direction : null} onClick={this.handleSort('expiry')}>
-                            Expiry Date
-                            </Table.HeaderCell>
-                        </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                        {_.map(data, ({ type, expiry, certificate }) => (
-                            <Table.Row key={certificate}>
-                            <Table.Cell>{certificate}</Table.Cell>
-                            <Table.Cell>{type}</Table.Cell>
-                            <Table.Cell>{expiry}</Table.Cell>
-                            </Table.Row>
-                        ))}
-                        </Table.Body>
-                    </Table>
-                   <NewCertForm onSubmit = {this.certificateSubmit} />     
+                    {this.Loader()}
+                    <NewCertForm onSubmit = {this.certificateSubmit} />     
                 </Grid.Column>
             </Grid>
         </Container>

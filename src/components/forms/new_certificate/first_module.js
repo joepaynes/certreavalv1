@@ -6,7 +6,8 @@ import renderField from './render_field'
 import {
     Modal,
     Form,
-    Button
+    Button,
+    Progress
 } from 'semantic-ui-react'
 
     const FirstModule = props => {
@@ -18,9 +19,11 @@ import {
             dimmer={"blurring"}
             open={state}
             onOpen={props.open}
+            onClose={props.close}
             closeIcon
             >
                 <Modal.Header>
+                    <Progress percent={props.percent} indicating />
                     Where applicable enter information exactly as it appears on your documentation
                 </Modal.Header>
                 <Modal.Content className="container">
