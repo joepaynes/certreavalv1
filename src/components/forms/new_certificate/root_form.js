@@ -1,19 +1,9 @@
 import React, {Component} from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { reduxForm } from 'redux-form'
 
-import renderField from "./render_field"
 import FirstModule from "./first_module"
 import SecondModule from "./second_module"
 import ThirdModule from "./third_module"
-
-import { 
-    Button, 
-    Checkbox, 
-    Form,
-    Container,
-    Grid,
-    Modal
-} from 'semantic-ui-react';
 
  class NewCertForm extends Component {
 

@@ -6,13 +6,11 @@ import renderField from './render_field'
 import {
     Modal,
     Form,
-    Button,
-    Container,
-    TextArea
+    Button
 } from 'semantic-ui-react'
 
 const ThirdModule = props => {
-    const {handleSubmit, previousPage, submitting, pristine, resetPage, open, close} = props
+    const {handleSubmit, previousPage, resetPage, open, close} = props
     const { state } = props
     return (
         <Modal

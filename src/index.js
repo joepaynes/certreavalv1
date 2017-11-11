@@ -18,17 +18,13 @@ import './style/style.css';
 import registerServiceWorker from './registerServiceWorker';
 
 //Returning user
-import { AUTH_USER } from './actions/types';
-import { auth } from './firebase/firebase';
+import { authListening } from './actions';
+const initialState =  {
+    auth: {currently: "User unauthenticated", authenticated: false, uid: null}
+};
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-const store = createStoreWithMiddleware(reducers);
-
-auth.onAuthStateChanged(user => {
-    if(user) {
-        store.dispatch({ type: AUTH_USER });
-    }
-});
+const store = createStoreWithMiddleware(reducers, initialState);
 
 ReactDOM.render(
     <Provider store={store}>
@@ -38,3 +34,8 @@ ReactDOM.render(
     </Provider>
     , document.getElementById('root'));
 registerServiceWorker();
+
+//Authentication Intialisation
+setTimeout(() => {
+    store.dispatch( authListening() )
+});

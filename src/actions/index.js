@@ -1,11 +1,10 @@
 import history from '../history';
 
 import {
-    CREATE_CERT,
-    FETCH_CERTS,
     AUTH_USER,
     AUTH_ERROR,
-    UNAUTH_USER
+    UNAUTH_USER,
+    ATTEMPT_AUTH
 } from './types';
 
 //db = firebase.database() - access to Realtime Database, refer to docs
@@ -14,37 +13,9 @@ import {
     auth 
 }  from '../firebase/firebase';
 
-export function createCert(values) {
-    return {
-        type: CREATE_CERT,
-        payload: values
-    };
-}
-
-export function fetchCerts() {
-    return function(dispatch) {
-        if (auth.currentUser === null) {
-            return console.log("No user certificates");
-        } else {
-            const uid = auth.currentUser.uid;
-            const user = db.ref(`/certifictates/${uid}`);
-            user.once("value")
-                .then(snapshot => {
-                    const cert = snapshot.val();
-                    console.log(cert);
-                    dispatch({
-                        type: FETCH_CERTS,
-                        payload: cert
-                    })
-                })
-                .catch(err => {
-                    console.log("Error fetching certificates", err);
-                });
-            }
-        }
-}
-
 //Authentication Action Creators
+//******************************
+
 export function signUpUser({ email, password }) {
     return function(dispatch) {
     //Submit email&password to server 
@@ -55,6 +26,12 @@ export function signUpUser({ email, password }) {
             dispatch({ type: AUTH_USER });
             // - Redirect to a route '/feature' 
             history.push('/dashboard');
+            //Create instance for User in Certification DB
+            const uid = response.uid;
+            db.ref(`/certificates/${uid}/settings`).set({
+                termsAndConditions: true,
+                userCreated: `${Date.now()}`
+            });
         })
 
         //If request is bad...
@@ -68,14 +45,19 @@ export function signUpUser({ email, password }) {
 
 export function signInUser({ email, password}) {
     return function(dispatch) {
+    dispatch({ type: ATTEMPT_AUTH })
     //Submit email&password to server
     auth.signInWithEmailAndPassword(email, password)
         //Good request
         .then(response => {
+            const uid = auth.currentUser.uid;
+            console.log("signInUser dispatch fired");
             // - Update state to indicate user authenticated
-            dispatch({ type: AUTH_USER });
+            // ***************** REMOVE PERHAPS AS LISTENER DEALS WITH THIS AUTH CHANGE ****** //
+            // At the moment removing causes user to be rerouted to dashboard - listener may not be working.
+            dispatch({ type: AUTH_USER, payload: uid });
             // - Redirect to a route '/feature' 
-            history.push('/dashboard');
+            setTimeout(history.push('/dashboard'), 300);
         })
         //If request is bad...
         .catch(error => {
@@ -99,8 +81,28 @@ export function signOutUser() {
             .then(res => {
                 dispatch({ type: UNAUTH_USER });
             })
-            .catch(err => {
-                console.log("Could not sign out user: ", err);
+            .catch(error => {
+                console.log("Could not sign out user: ", error);
+                dispatch(authError(error.code + ": " + error.message));
             })
+    }
+}
+
+//Start listening for Auth Changes
+export function authListening() {
+    return function(dispatch) {
+        auth.onAuthStateChanged(user => {
+            if(user) {
+                const uid = user.uid
+                dispatch({
+                    type: AUTH_USER,
+                    payload: uid
+                });
+            } else {
+                dispatch({
+                    type: UNAUTH_USER
+                });
+            }
+        });
     }
 }

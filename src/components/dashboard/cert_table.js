@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import * as actions from '../../actions';
+import history from '../../history';
 
 import VerticalMenu from './vert_menu';
 import NewCertForm from "../forms/new_certificate/root_form"
@@ -17,36 +18,36 @@ import {
     Container,
 } from 'semantic-ui-react';
 
-const user = auth.currentUser;
-
 class CertTable extends Component {
 
     state = {
         column: null,
-        data: [
-            {
-                certificate: "Name of Certificate",
-                type: "STCW, CoC, Auxillary",
-                expiry: "Date of expiry"
-            }
-        ],
+        // No certificates will return this initial data - TODO - push out to own file
+        data: null,
         direction: null,
     }
 
     componentWillMount() {
-        if (user) {
-            const uid = auth.currentUser.uid;
-            const user = db.ref(`/certifictates/${uid}`);
-            user.once("value")
-                .then(snapshot => {
-                    this.setState({
-                        data: snapshot.val()
-                    })
+        const uid = this.props.authentication.uid;
+        const user = db.ref(`certificates/${uid}/certificates`);
+        user.once("value")
+            .then(snapshot => {
+                const uncompiled = snapshot.val();
+                const complier = data => {
+                    return {
+                        certificate: data.name,
+                        type: data.type,
+                        expiry: data.expiryDate
+                    }
+                }
+                const compiled = _.map(uncompiled, complier);
+                this.setState({
+                    data: compiled
                 })
-                .catch(err => {
-                    console.log("Error fetching certificates", err);
-                });
-        }
+            })
+            .catch(err => {
+                console.log("Error fetching certificates", err);
+            });
     }
 
     handleSort = clickedColumn => () => {
@@ -70,6 +71,7 @@ class CertTable extends Component {
 
     render() {
         const { column, data, direction } = this.state
+        console.log(this.props.authentication);
 
         return(
         <Container className="dashboard">
@@ -110,23 +112,25 @@ class CertTable extends Component {
     };
 
     certificateSubmit(values) {
-       console.log(values)
-       db.ref("/certificates").set({
-            name: values.name,
-            issueDate: values.issueDate,
-            expiryDate: values.expiryDate,
-            type: values.type,
-            institute: values.institute,
-            country: values.country,
-            declaration: values.declaration,
-            TC: values.TC
-       })
+        const uid = auth.currentUser.uid;
+        db.ref(`certificates/${uid}/certificates/${values.name}`).set({
+                name: values.name,
+                issueDate: values.issueDate,
+                expiryDate: values.expiryDate,
+                type: values.type,
+                institute: values.institute,
+                country: values.country,
+                declaration: values.declaration,
+                TC: values.TC
+        })
+        history.push('/dashboard');
     }
-    }
+}
 
 function mapStateToProps(state) {
     return {
-        certificates: state.certificates
+        certificates: state.certificates,
+        authentication: state.auth
     };
 }
 export default connect(mapStateToProps, actions)(CertTable);

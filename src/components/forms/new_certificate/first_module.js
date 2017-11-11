@@ -6,8 +6,7 @@ import renderField from './render_field'
 import {
     Modal,
     Form,
-    Button,
-    Container
+    Button
 } from 'semantic-ui-react'
 
     const FirstModule = props => {

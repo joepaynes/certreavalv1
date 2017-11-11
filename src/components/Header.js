@@ -15,7 +15,6 @@ import logo from '../images/logo.png';
 
 class Header extends Component {
     renderLinks() {
-        console.log()
         if(this.props.authenticated === true) {
             return <Menu.Item position='right'>
                         <Link to="/signout">
