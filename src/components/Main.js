@@ -4,8 +4,6 @@ import { Switch, Route } from 'react-router-dom'
 //Components
 import Home from './home/Home';
 import Dashboard from './dashboard/router';
-import SignInForm from  './auth/signin';
-import SignUpForm from './auth/signup';
 import SignOut from './auth/signout';
 
 //Auth
@@ -20,8 +18,6 @@ const Main = () => (
   <main>
     <Switch>
       <Route exact path='/' component={Home}/>
-      <Route path='/signin' component={SignInForm} />
-      <Route path='/signup' component={SignUpForm}/>
       <Route path='/signout' component={SignOut} />
       <Route path='/dashboard' component={RequireAuth(Dashboard)}/>
     </Switch>

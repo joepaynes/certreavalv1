@@ -33,8 +33,10 @@ class SignUpForm extends Component {
         this.props.signUpUser(this.state);
     }
 
+
     render() {
         return(
+        <div>
         <Form onSubmit={this.handleSubmit}>
             <Form.Field>
               <label>Email</label>
@@ -52,11 +54,14 @@ class SignUpForm extends Component {
                 type='password'
                 name="password"
                 value={this.state.password}
-                onChange={this.handleInputChange} 
+                onChange={this.handleInputChange}
             />
             </Form.Field>
             <Button type='submit'>Submit</Button>
         </Form>
+
+        <Button onClick={() => this.props.handleFB()}>Facebook</Button>
+        </div>
         );
     };
 }

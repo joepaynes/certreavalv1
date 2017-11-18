@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import SignInForm from './auth/signin';
+import SignUpForm from './auth/signup';
+
 //Semantic Components
 import {
     Menu,
     Container,
     Button,
     Image,
-    Icon
+    Icon,
+    Modal
 } from 'semantic-ui-react';
 
 import logo from '../images/logo.png';
@@ -27,12 +31,16 @@ class Header extends Component {
         } else {
             return  <Menu.Item position='right'>
                         <Menu.Item as="a">About Us</Menu.Item>
-                        <Link to="/signin">
-                            <Button>Sign in</Button>
-                        </Link>
-                        <Link to="/signup">
-                            <Button style={{ marginLeft: '0.5em' }}>Sign Up</Button>
-                        </Link>
+                        <Modal trigger={<Button>Sign in</Button>}>
+                            <Modal.Content>
+                                <SignInForm />
+                            </Modal.Content>
+                        </Modal>
+                        <Modal trigger={<Button style={{ marginLeft: '0.5em' }}>Sign Up</Button>}>
+                            <Modal.Content>
+                                <SignUpForm />
+                            </Modal.Content>
+                        </Modal>
                     </Menu.Item>    
         }
 

@@ -4,13 +4,16 @@ import {
     AUTH_USER,
     AUTH_ERROR,
     UNAUTH_USER,
-    ATTEMPT_AUTH
+    ATTEMPT_AUTH,
+    LOG_USER,
+    LOGOUT_USER
 } from './types';
 
 //db = firebase.database() - access to Realtime Database, refer to docs
 import {
     db,
-    auth 
+    auth,
+    providerFB 
 }  from '../firebase/firebase';
 
 //Authentication Action Creators
@@ -68,6 +71,27 @@ export function signInUser({ email, password}) {
     }
 }
 
+//Used with Firebase Authentication
+export function handleFB() {
+    return function(dispatch) {
+        dispatch({ type: ATTEMPT_AUTH })
+        //Start FB login flow
+        auth.signInWithPopup(providerFB)
+            //Good Response
+            .then(result => {   
+                dispatch({ type: AUTH_USER, payload: result.user.uid });
+                dispatch({ type: LOG_USER, payload: result.user });
+                history.push('/dashboard');
+            })
+            .catch(error => {
+                // - Show an error to the user
+                console.log(error.code + ": " + error.message)
+                dispatch(authError(error.code + ": " + error.message));
+            })
+    }
+}
+
+
 export function authError(error) {
     return {
         type: AUTH_ERROR,
@@ -80,6 +104,7 @@ export function signOutUser() {
         auth.signOut()
             .then(res => {
                 dispatch({ type: UNAUTH_USER });
+                dispatch({ type: LOGOUT_USER });
             })
             .catch(error => {
                 console.log("Could not sign out user: ", error);
@@ -98,9 +123,16 @@ export function authListening() {
                     type: AUTH_USER,
                     payload: uid
                 });
+                dispatch({
+                    type: LOG_USER,
+                    payload: user
+                });
             } else {
                 dispatch({
                     type: UNAUTH_USER
+                });
+                dispatch({
+                    type: LOGOUT_USER
                 });
             }
         });

@@ -9,6 +9,7 @@ const  config = {
 
 firebase.initializeApp(config);
 
+export const providerFB = new firebase.auth.FacebookAuthProvider();
 export const db = firebase.database();
 export const auth = firebase.auth();
 

@@ -18,17 +18,14 @@ import {
     Item,
     Grid,
     Container,
-    Image as ImageComponent,
     Segment
 } from 'semantic-ui-react';
 
 class CertTable extends Component {
 
     state = {
-        column: null,
         // No certificates will return this initial data - TODO - push out to own file
         data: null,
-        direction: null,
         isLoading: true
     }
 
@@ -58,25 +55,6 @@ class CertTable extends Component {
                 console.log("Error fetching certificates", err);
             });
     }
-
-    handleSort = clickedColumn => () => {
-        const { column, data, direction } = this.state
-    
-        if (column !== clickedColumn) {
-          this.setState({
-            column: clickedColumn,
-            data: _.sortBy(data, [clickedColumn]),
-            direction: 'ascending',
-          })
-    
-          return
-        }
-    
-        this.setState({
-          data: data.reverse(),
-          direction: direction === 'ascending' ? 'descending' : 'ascending',
-        })
-      }
 
     renderCerts = () => {
         const data = this.state.data;
@@ -108,8 +86,8 @@ class CertTable extends Component {
     }
 
     render() {
-        const { column, data, direction } = this.state
-        console.log(this.props.authentication);
+        console.log(this.state.data);
+        console.log(this.props.user);
 
         return(
         <Container className="dashboard">
@@ -144,8 +122,8 @@ class CertTable extends Component {
 
 function mapStateToProps(state) {
     return {
-        certificates: state.certificates,
-        authentication: state.auth
+        user: state.user,
+        authentication: state.auth,
     };
 }
 export default connect(mapStateToProps, actions)(CertTable);
