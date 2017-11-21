@@ -74,30 +74,29 @@ class CertTable extends Component {
     Loader = () => {
         if (this.state.isLoading === true) {
             return (
-                <Segment size="big" style={{ minHeight: 700}} loading />
+                <Segment size="big" style={{ minHeight: 500}} loading />
             )
         } else if (this.state.isLoading === false) {
             return (
+                <div>
                 <Item.Group divided link>
                     {this.renderCerts()}
                 </Item.Group>
+                <NewCertForm onSubmit = {this.certificateSubmit} /> 
+                </div>
             ) 
         }
     }
 
     render() {
-        console.log(this.state.data);
-        console.log(this.props.user);
-
         return(
         <Container className="dashboard">
-            <Grid>
+            <Grid stackable>
                 <Grid.Column width={4}>
                     <VerticalMenu activeItem="Certificates" />
                 </Grid.Column>
                 <Grid.Column width={12}>
-                    {this.Loader()}
-                    <NewCertForm onSubmit = {this.certificateSubmit} />     
+                    {this.Loader()}  
                 </Grid.Column>
             </Grid>
         </Container>

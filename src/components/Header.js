@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import history from '../history';
 
 import SignInForm from './auth/signin';
 import SignUpForm from './auth/signup';
@@ -12,20 +13,33 @@ import {
     Button,
     Image,
     Icon,
-    Modal
+    Modal,
+    Popup
 } from 'semantic-ui-react';
 
 import logo from '../images/logo.png';
 
 class Header extends Component {
+    profilePicture = () => {
+        if(!this.props.user.photoURL) {
+            return <Icon name="user circle outline" color="black" size="big" />
+        } else {
+            return <Image src={this.props.user.photoURL} avatar />
+        }
+    };
+
     renderLinks() {
         if(this.props.authenticated === true) {
             return <Menu.Item position='right'>
-                        <Link to="/signout">
-                            <Button>Sign Out</Button>
-                        </Link>
                         <Link to="/dashboard">
-                            <Icon name="user circle outline" color="black" size="big" />
+                            <div style={{marginRight: "5px", display: "inline"}}>
+                                {this.props.user.displayName}
+                            </div>
+                            <Popup trigger={this.profilePicture()} on="hover" hoverable="true" basic>
+                                <Menu compact>
+                                    <Menu.Item  icon="sign out" as="a" onClick={() => history.push('/signout')} name="Sign Out" />
+                                </Menu>
+                            </Popup>
                         </Link>
                     </Menu.Item>
         } else {
@@ -62,7 +76,10 @@ class Header extends Component {
 }
 
 function mapStateToProps(state) {
-    return { authenticated: state.auth.authenticated};
+    return { 
+        authenticated: state.auth.authenticated,
+        user: state.user
+    };
 }
 
 export default connect(mapStateToProps, null)(Header);
