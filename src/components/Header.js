@@ -30,35 +30,39 @@ class Header extends Component {
 
     renderLinks() {
         if(this.props.authenticated === true) {
-            return <Menu.Item position='right'>
-                        <Link to="/dashboard">
-                            <div style={{marginRight: "5px", display: "inline"}}>
-                                {this.props.user.displayName}
-                            </div>
-                            <Popup trigger={this.profilePicture()} on="hover" hoverable="true" basic>
-                                <Menu compact>
-                                    <Menu.Item  icon="sign out" as="a" onClick={() => history.push('/signout')} name="Sign Out" />
-                                </Menu>
-                            </Popup>
-                        </Link>
-                    </Menu.Item>
+            return (
+                <Menu.Item position='right'>
+                    <Link to="/dashboard">
+                        <div style={{marginRight: "5px", display: "inline"}}>
+                            {this.props.user.displayName}
+                        </div>
+                        <Popup trigger={this.profilePicture()} on="hover" hoverable={true} basic>
+                            <Menu compact>
+                                <Menu.Item  icon="sign out" as="a" onClick={() => history.push('/signout')} name="Sign Out" />
+                            </Menu>
+                        </Popup>
+                    </Link>
+                </Menu.Item>
+            )
         } else {
-            return  <Menu.Item position='right'>
-                        <Menu.Item as="a">About Us</Menu.Item>
-                        <Modal trigger={<Button>Sign in</Button>}>
-                            <Modal.Content>
-                                <SignInForm />
-                            </Modal.Content>
-                        </Modal>
-                        <Modal trigger={<Button style={{ marginLeft: '0.5em' }}>Sign Up</Button>}>
-                            <Modal.Content>
-                                <SignUpForm />
-                            </Modal.Content>
-                        </Modal>
-                    </Menu.Item>    
+            return  (
+                <Menu.Item position='right'>
+                    <Menu.Item as="a">About Us</Menu.Item>
+                    <Modal closeIcon trigger={<Button>Sign in</Button>}>
+                        <Modal.Content>
+                            <SignInForm />
+                        </Modal.Content>
+                    </Modal>
+                    <Modal closeIcon trigger={<Button style={{ marginLeft: '0.5em' }}>Sign Up</Button>}>
+                        <Modal.Content>
+                            <SignUpForm />
+                        </Modal.Content>
+                    </Modal>
+                </Menu.Item>   
+            )
         }
-
     }
+
     render() {
         return(
         <div>
